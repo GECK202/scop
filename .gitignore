@@ -2,4 +2,5 @@
 .vscode/
 *.json
 *.o
+libft.a
 scop
