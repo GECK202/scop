@@ -12,7 +12,7 @@
 
 void	ft_swap(int *n1, int *n2)
 {
-	int tmp;
+	int	tmp;
 
 	tmp = *n1;
 	*n1 = *n2;

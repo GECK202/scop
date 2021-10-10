@@ -38,7 +38,7 @@ static int	check_border(long long res, int sign, int len)
 	return (res * sign);
 }
 
-int			ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
 	long long	res;
 	int			sign;

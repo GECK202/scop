@@ -21,7 +21,8 @@ static void	parse_data(FILE *fs, t_model *model)
 
 	buf = NULL;
 	buf_cap = 0;
-	while ((buf_len = getline(&buf, &buf_cap, fs)) > 0)
+	buf_len = getline(&buf, &buf_cap, fs);
+	while (buf_len > 0)
 	{
 		if (buf_len > 1 && buf[0] == 'v' && buf[1] == ' ')
 		{
@@ -35,6 +36,7 @@ static void	parse_data(FILE *fs, t_model *model)
 			store_face(split, model->f_array, &(model->nb_face));
 			ft_free_tab(split);
 		}
+		buf_len = getline(&buf, &buf_cap, fs);
 	}
 	free(buf);
 }
@@ -45,8 +47,8 @@ static int	parse_file_line(char *line)
 	char	**split;
 
 	i = 0;
-	split = NULL;
-	if (!(split = ft_strsplit(line, ' ')))
+	split = ft_strsplit(line, ' ');
+	if (!split)
 		exit_error(ALLOC, NULL);
 	while (split[i])
 		i++;
@@ -66,30 +68,35 @@ static void	parse_file(FILE *fs, unsigned int *nb_vtx, unsigned int *nb_face)
 
 	buf = NULL;
 	buf_cap = 0;
-	while ((buf_len = getline(&buf, &buf_cap, fs)) > 0)
+	buf_len = getline(&buf, &buf_cap, fs);
+	while (buf_len > 0)
 	{
 		if (buf_len > 1 && buf[0] == 'v' && buf[1] == ' ')
 			(*nb_vtx)++;
 		else if (buf_len > 1 && buf[0] == 'f' && buf[1] == ' ')
 			(*nb_face) += parse_file_line(buf);
+		buf_len = getline(&buf, &buf_cap, fs);
 	}
 	free(buf);
 	if (*nb_vtx < 3 || *nb_face == 0)
 		exit_error(MODEL_DATA, NULL);
 }
 
-void		handle_file(char *path, t_model *model)
+void	handle_file(char *path, t_model *model)
 {
 	FILE	*fs;
 
-	if (!(fs = fopen(path, "r")))
+	fs = fopen(path, "r");
+	if (!fs)
 		exit_error(OPEN, path);
 	parse_file(fs, &(model->nb_vtx), &(model->nb_face));
-	model->name = "model";//ft_strrchr(path, '/') + 1;
-	if (!(model->v_array = (t_v3**)malloc(sizeof(t_v3*) * model->nb_vtx)))
+	model->name = "model";
+	model->v_array = (t_v3 **)malloc(sizeof(t_v3 *) * model->nb_vtx);
+	if (!model->v_array)
 		exit_error(ALLOC, NULL);
-	if (!(model->f_array =
-	(unsigned int**)malloc(sizeof(unsigned int*) * model->nb_face)))
+	model->f_array = (unsigned int **)malloc(sizeof(unsigned int *)
+			* model->nb_face);
+	if (!model->f_array)
 		exit_error(ALLOC, NULL);
 	if (!model->v_array || !model->f_array)
 	{

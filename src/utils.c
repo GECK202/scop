@@ -24,16 +24,17 @@ unsigned int	ft_strtoui(char *str)
 	return ((unsigned int)val);
 }
 
-t_mats		*get_matrices(void)
+t_mats	*get_matrices(void)
 {
 	t_env	*env;
 
-	if (!(env = get_env_struct(NULL)))
+	env = get_env_struct(NULL);
+	if (!env)
 		return (NULL);
 	return (env->mats);
 }
 
-t_env			*get_env_struct(t_env *env)
+t_env	*get_env_struct(t_env *env)
 {
 	static t_env	*save = NULL;
 

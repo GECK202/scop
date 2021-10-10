@@ -28,7 +28,7 @@ static int	from_hex(char c)
 	return (-1);
 }
 
-int			ft_atoi_16(char *str)
+int	ft_atoi_16(char *str)
 {
 	long long	res;
 	int			len;

@@ -16,23 +16,25 @@ static t_render_opts	*init_render_opts(void)
 {
 	t_render_opts	*render_opts;
 
-	if (!(render_opts = (t_render_opts*)malloc(sizeof(*render_opts))))
+	render_opts = (t_render_opts *)malloc(sizeof(*render_opts));
+	if (!render_opts)
 		exit_error(ALLOC, NULL);
-	render_opts->demo = 1;
+	render_opts->demo = 0;
 	render_opts->interpolate = 0;
 	render_opts->wireframe = 0;
 	render_opts->color = 0;
-	render_opts->gradient = 1;
+	render_opts->gradient = 0;
 	render_opts->texture = 0;
 	render_opts->ambient_light = 1.0f;
 	return (render_opts);
 }
 
-static t_model			*init_model(void)
+static t_model	*init_model(void)
 {
 	t_model	*model;
 
-	if (!(model = (t_model*)malloc(sizeof(*model))))
+	model = (t_model *)malloc(sizeof(*model));
+	if (!model)
 		exit_error(ALLOC, NULL);
 	model->nb_vtx = 0;
 	model->nb_face = 0;
@@ -46,11 +48,12 @@ static t_model			*init_model(void)
 	return (model);
 }
 
-t_env					*init_env(void)
+t_env	*init_env(void)
 {
 	t_env	*env;
 
-	if (!(env = (t_env*)malloc(sizeof(*env))))
+	env = (t_env *)malloc(sizeof(*env));
+	if (!env)
 		exit_error(ALLOC, NULL);
 	get_env_struct(env);
 	env->model = init_model();
@@ -58,25 +61,27 @@ t_env					*init_env(void)
 	return (env);
 }
 
-t_mats				*init_mats(float coord_interval)
+t_mats	*init_mats(float coord_interval)
 {
 	t_mats	*mats;
 
-	if (!(mats = (t_mats*)malloc(sizeof(*mats))))
+	mats = (t_mats *)malloc(sizeof(*mats));
+	if (!mats)
 		exit_error(ALLOC, NULL);
-	mats->fov = 90.0f;
+	mats->fov = 70.0f;
+	mats->view = new_m4(MAT_IDENTITY);
 	mats->translate = m4_transl(new_m4(MAT_IDENTITY),
-	new_v3(0, 0, (coord_interval * -0.75f)));
+			new_v3(0, 0, (coord_interval * -1.75f)));
 	mats->rotate = new_m4(MAT_IDENTITY);
 	mats->scale = new_m4(MAT_IDENTITY);
-	mats->view = new_m4(MAT_IDENTITY);
 	mats->proj = new_proj_m4(mats->fov,
-	(float)WIN_W / (float)WIN_H, 0.1f, 100.0f);
+			(float)WIN_W / (float)WIN_H, 0.1f, 100.0f);
+	mats->rotate = m4_rot(mats->rotate, 0.75f, Y_AXIS);
 	mvp_update(mats);
 	return (mats);
 }
 
-void					init_window(GLFWwindow **win, char *model_name)
+void	init_window(GLFWwindow **win, char *model_name)
 {
 	if (!glfwInit())
 		exit_error(GLFW_INIT, NULL);
@@ -85,19 +90,18 @@ void					init_window(GLFWwindow **win, char *model_name)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	if (!(*win = glfwCreateWindow(WIN_W, WIN_H, model_name, NULL, NULL)))
+	*win = glfwCreateWindow(WIN_W, WIN_H, model_name, NULL, NULL);
+	if (!(*win))
 		exit_error(WIN_CREAT, NULL);
-	glfwSetKeyCallback(*win, &key_callback);
+	glfwSetKeyCallback(*win, (GLFWkeyfun)(&key_callback));
+	glfwSwapInterval(1);
 	glfwMakeContextCurrent(*win);
 	glfwGetFramebufferSize(*win, NULL, NULL);
-	//glViewport(0, 0, WIN_W, WIN_H);
-
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		write(1, "Failed to initialize GLAD\n", 26);
 		exit_error(WIN_CREAT, NULL);
 	}
-
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 }

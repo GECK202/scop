@@ -12,16 +12,20 @@
 
 #include "libmat.h"
 
-t_m4		new_m4(float f)
+t_m4	new_m4(float f)
 {
-	int		i;
+	int		i;		
 	t_m4	mat;
 
 	i = -1;
 	while (++i < 16)
 	{
 		if (f == MAT_IDENTITY)
-			mat.m[i] = i % 5 == 0 ? 1 : 0;
+		{
+			mat.m[i] = 0;
+			if (i % 5 == 0)
+				mat.m[i] = 1;
+		}
 		else
 			mat.m[i] = f;
 	}

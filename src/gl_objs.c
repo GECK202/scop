@@ -12,7 +12,7 @@
 
 #include "scop.h"
 
-void				gl_objs_update(t_gl_objs *gl_objs,
+void	gl_objs_update(t_gl_objs *gl_objs,
 t_render_opts *render_opts, GLfloat *mvp_address)
 {
 	glUniformMatrix4fv(gl_objs->mvp, 1, GL_FALSE, mvp_address);
@@ -23,28 +23,30 @@ t_render_opts *render_opts, GLfloat *mvp_address)
 	glUniform1f(gl_objs->light_loc, render_opts->ambient_light);
 }
 
-static void			bind_uniform_locations(t_gl_objs *gl_objs)
+static void	bind_uniform_locations(t_gl_objs *gl_objs)
 {
-	if ((gl_objs->mvp =
-	glGetUniformLocation(gl_objs->shader_prog, "mvp")) == -1)
+	gl_objs->mvp = glGetUniformLocation(gl_objs->shader_prog, "mvp");
+	if (gl_objs->mvp == -1)
 		exit_error(UNIFORM_VAR, NULL);
-	if ((gl_objs->interpolate =
-	glGetUniformLocation(gl_objs->shader_prog, "interpolate")) == -1)
+	gl_objs->interpolate = glGetUniformLocation(gl_objs->shader_prog,
+			"interpolate");
+	if (gl_objs->interpolate == -1)
 		exit_error(UNIFORM_VAR, NULL);
-	if ((gl_objs->color =
-	glGetUniformLocation(gl_objs->shader_prog, "color")) == -1)
+	gl_objs->color = glGetUniformLocation(gl_objs->shader_prog, "color");
+	if (gl_objs->color == -1)
 		exit_error(UNIFORM_VAR, NULL);
-	if ((gl_objs->gradient =
-	glGetUniformLocation(gl_objs->shader_prog, "gradient")) == -1)
+	gl_objs->gradient = glGetUniformLocation(gl_objs->shader_prog, "gradient");
+	if (gl_objs->gradient == -1)
 		exit_error(UNIFORM_VAR, NULL);
-	if ((gl_objs->tex_loc =
-	glGetUniformLocation(gl_objs->shader_prog, "texturing")) == -1)
+	gl_objs->tex_loc = glGetUniformLocation(gl_objs->shader_prog, "texturing");
+	if (gl_objs->tex_loc == -1)
 		exit_error(UNIFORM_VAR, NULL);
-	if ((gl_objs->light_loc =
-	glGetUniformLocation(gl_objs->shader_prog, "ambient_light")) == -1)
+	gl_objs->light_loc = glGetUniformLocation(gl_objs->shader_prog,
+			"ambient_light");
+	if (gl_objs->light_loc == -1)
 		exit_error(UNIFORM_VAR, NULL);
 	glUniform1i(glGetUniformLocation(gl_objs->shader_prog,
-	"kitten_texture"), 0);
+			"textur"), 0);
 }
 
 static unsigned int	generate_ebo(unsigned int **faces, unsigned int nb_faces)
@@ -53,25 +55,26 @@ static unsigned int	generate_ebo(unsigned int **faces, unsigned int nb_faces)
 	unsigned int	j;
 	unsigned int	k;
 	unsigned int	ebo;
-	unsigned int	indices[nb_faces * 3];
+	unsigned int	*indices;
 
 	i = 0;
 	j = 0;
+	indices = (unsigned int *)malloc(sizeof(unsigned int) * nb_faces * 3);
 	while (i < nb_faces)
 	{
-		k = 0;
-		while (k < 3)
+		k = -1;
+		while (++k < 3)
 		{
 			indices[j] = faces[i][k];
 			j++;
-			k++;
 		}
 		i++;
 	}
 	glGenBuffers(1, &ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
-	GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * nb_faces * 3,
+		indices, GL_DYNAMIC_DRAW);
+	free(indices);
 	return (ebo);
 }
 
@@ -81,32 +84,35 @@ static unsigned int	generate_vbo(t_v3 **vec, unsigned int nb_vtx)
 	unsigned int	j;
 	unsigned int	k;
 	unsigned int	vbo;
-	float			vertices[nb_vtx * 3];
+	float			*vertices;
 
 	i = 0;
 	j = 0;
+	vertices = (float *)malloc(sizeof(float) * nb_vtx * 3);
 	while (i < nb_vtx)
 	{
-		k = 0;
-		while (k < 3)
+		k = -1;
+		while (++k < 3)
 		{
 			vertices[j] = vec[i]->v[k];
 			j++;
-			k++;
 		}
 		i++;
 	}
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nb_vtx * 3,
+		vertices, GL_DYNAMIC_DRAW);
+	free(vertices);
 	return (vbo);
 }
 
-t_gl_objs			*generate_gl_objs(t_model *model)
+t_gl_objs	*generate_gl_objs(t_model *model)
 {
 	t_gl_objs	*gl_objs;
 
-	if (!(gl_objs = (t_gl_objs *)malloc(sizeof(*gl_objs))))
+	gl_objs = (t_gl_objs *)malloc(sizeof(*gl_objs));
+	if (!gl_objs)
 		exit_error(ALLOC, NULL);
 	glGenVertexArrays(1, &(gl_objs->vao));
 	glBindVertexArray(gl_objs->vao);
@@ -115,13 +121,12 @@ t_gl_objs			*generate_gl_objs(t_model *model)
 	gl_objs->vtx_shader = gen_shader(VTX_SHADER, GL_VERTEX_SHADER);
 	gl_objs->frag_shader = gen_shader(FRAG_SHADER, GL_FRAGMENT_SHADER);
 	gl_objs->shader_prog = gen_shader_prog(gl_objs->vtx_shader,
-	gl_objs->frag_shader);
+			gl_objs->frag_shader);
 	gl_objs->vtx_shader = 0;
 	gl_objs->frag_shader = 0;
-	gl_objs->tex_id[0] = load_tex("chaton.bmp");
-	gl_objs->tex_id[1] = load_tex("chaton.bmp");
+	gl_objs->tex_id = load_tex("texture.bmp");
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
-	(GLvoid*)0);
+		(GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	glUseProgram(gl_objs->shader_prog);
 	bind_uniform_locations(gl_objs);

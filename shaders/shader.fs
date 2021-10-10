@@ -3,8 +3,7 @@
 uniform int interpolate;
 uniform int texturing;
 uniform float ambient_light;
-uniform sampler2D kitten_texture;
-uniform sampler2D fkoehler_texture;
+uniform sampler2D tex;
 
 smooth in vec4 smooth_color;
 flat in vec4 flat_color;
@@ -15,9 +14,7 @@ out vec4 FragColor;
 void main()
 {
 	if (texturing == 1)
-		FragColor = texture(kitten_texture, tex_coordinates);
-	else if (texturing == 2)
-		FragColor = texture(fkoehler_texture, tex_coordinates);
+		FragColor = texture(tex, tex_coordinates);
 	else if (interpolate == 1)
 		FragColor = smooth_color;
 	else

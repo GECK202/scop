@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-t_m4		m4_scale(t_m4 m, float coef)
+t_m4	m4_scale(t_m4 m, float coef)
 {
 	int	i;
 

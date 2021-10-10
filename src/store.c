@@ -12,6 +12,15 @@
 
 #include "scop.h"
 
+static void	fill_array(unsigned int **array, unsigned int j, char **data)
+{
+	int	i;
+
+	i = 3;
+	while (--i >= 0)
+		array[j][i] = ft_strtoui(data[i + 1]) - 1;
+}
+
 void	store_vertex(char **data, t_v3 **array, unsigned int *nb_vtx)
 {
 	static unsigned int	vtx_idx = 0;
@@ -27,10 +36,11 @@ void	store_vertex(char **data, t_v3 **array, unsigned int *nb_vtx)
 		(*nb_vtx)--;
 		return ;
 	}
-	if (!(array[vtx_idx] = (t_v3*)malloc(sizeof(t_v3))))
+	array[vtx_idx] = (t_v3 *)malloc(sizeof(t_v3));
+	if (!(array[vtx_idx]))
 		exit_error(ALLOC, NULL);
 	*(array[vtx_idx]) = new_v3(strtof(data[1], NULL),
-	strtof(data[2], NULL), strtof(data[3], NULL));
+			strtof(data[2], NULL), strtof(data[3], NULL));
 	vtx_idx++;
 }
 
@@ -47,7 +57,8 @@ void	store_face(char **data, unsigned int **array, unsigned int *nb_face)
 		put_error(UNSUPPORTED, "A face");
 		return ;
 	}
-	if (!(array[f_idx] = (unsigned int*)malloc(sizeof(unsigned int) * 3)))
+	array[f_idx] = (unsigned int *)malloc(sizeof(unsigned int) * 3);
+	if (!(array[f_idx]))
 		exit_error(ALLOC, NULL);
 	if (--i == 4)
 	{
@@ -58,7 +69,6 @@ void	store_face(char **data, unsigned int **array, unsigned int *nb_face)
 		store_face(&(data[1]), array, nb_face);
 		return ;
 	}
-	while (--i >= 0)
-		array[f_idx][i] = ft_strtoui(data[i + 1]) - 1;
+	fill_array(array, f_idx, data);
 	f_idx++;
 }

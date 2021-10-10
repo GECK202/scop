@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-t_m4		m4_mul(t_m4 m1, t_m4 m2)
+t_m4	m4_mul(t_m4 m1, t_m4 m2)
 {
 	int		x;
 	int		y;

@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-t_m4		new_proj_m4(float fov, float aspect_ratio, float near, float far)
+t_m4	new_proj_m4(float fov, float aspect_ratio, float near, float far)
 {
 	t_m4			mat;
 	static float	deg_to_rad = PI_VALUE / 180;

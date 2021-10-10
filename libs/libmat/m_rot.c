@@ -48,7 +48,7 @@ static t_m4	get_z_rot_m4(float theta)
 	return (mat);
 }
 
-t_m4			m4_rot(t_m4 m, float angle, t_axis axis)
+t_m4	m4_rot(t_m4 m, float angle, t_axis axis)
 {
 	t_m4	mat;
 

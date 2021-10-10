@@ -53,7 +53,7 @@ static char	*return_str_from_buf(char *buf, int iter)
 	return (tmp);
 }
 
-char		*ft_itoa(int nbr)
+char	*ft_itoa(int nbr)
 {
 	char			buf[12];
 	int				i;

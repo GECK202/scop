@@ -26,7 +26,7 @@ static void	put_error2(t_err err, const char *str)
 	}
 }
 
-void		put_error(t_err err, const char *str)
+void	put_error(t_err err, const char *str)
 {
 	ft_putstr_fd("scop: ", 2);
 	if (err == NB_ARG)
@@ -53,7 +53,7 @@ void		put_error(t_err err, const char *str)
 		put_error2(err, str);
 }
 
-void		exit_error(t_err err, const char *str)
+void	exit_error(t_err err, const char *str)
 {
 	put_error(err, str);
 	exit(EXIT_FAILURE);

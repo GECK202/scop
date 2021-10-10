@@ -14,7 +14,7 @@
 
 PROGRAM_NAME = scop
 
-FLAGS =	#-Wall -Wextra -Werror -g
+FLAGS =	-Wall -Wextra -Werror -g
 
 FILES =		main \
 			matrix \

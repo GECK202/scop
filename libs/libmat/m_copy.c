@@ -12,13 +12,14 @@
 
 #include "libmat.h"
 
-t_m4		*m4_dup(t_m4 src)
+t_m4	*m4_dup(t_m4 src)
 {
 	int		i;
 	t_m4	*dst;
 
 	i = -1;
-	if (!(dst = (t_m4*)malloc(sizeof(*dst))))
+	dst = (t_m4 *)malloc(sizeof(*dst));
+	if (!dst)
 		return (NULL);
 	while (++i < 16)
 		dst->m[i] = src.m[i];

@@ -14,7 +14,7 @@
 
 static int	count_words(char const *s, char c)
 {
-	int words;
+	int	words;
 
 	words = 0;
 	while (*s)
@@ -33,7 +33,7 @@ static int	count_words(char const *s, char c)
 
 static void	del_map(char **map, int count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < count)
@@ -93,15 +93,19 @@ static char	**get_words(char *s, char c, char **map, int words)
 	return (map);
 }
 
-char		**ft_strsplit(char const *s, char c)
+char	**ft_strsplit(char const *s, char c)
 {
 	char	**map;
 	char	*src;
 	int		words;
 
-	if (!s || !(src = ft_strdup2(s)))
-		return (0);
+	if (!s)
+		return (NULL);
+	src = ft_strdup2(s);
+	if (!src)
+		return (NULL);
 	words = count_words(src, c);
+	map = NULL;
 	map = (char **)malloc(sizeof(char *) * (words + 1));
 	if (map)
 		map = get_words(src, c, map, words);

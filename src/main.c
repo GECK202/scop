@@ -17,23 +17,23 @@ static void	rendering_loop(t_env *env)
 	while (!glfwWindowShouldClose(env->window))
 	{
 		glfwPollEvents();
-		glClearColor(0.05f, 0.15f, 0.05f, 1.0f);
+		glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindVertexArray(env->gl_objs->vao);
 		gl_objs_update(env->gl_objs, env->render_opts, env->mats->mvp.m);
 		glDrawElements(GL_TRIANGLES, env->model->nb_face * 3,
-		GL_UNSIGNED_INT, 0);
+			GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		glfwSwapBuffers(env->window);
 		if (env->render_opts->demo == 1)
 		{
-			env->mats->rotate = m4_rot(env->mats->rotate, -0.01f, Y_AXIS);
+			env->mats->rotate = m4_rot(env->mats->rotate, -0.05f, Y_AXIS);
 			mvp_update(env->mats);
 		}
 	}
 }
 
-int			main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_env	*env;
 

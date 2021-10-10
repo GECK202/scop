@@ -12,7 +12,7 @@
 
 #include "scop.h"
 
-static void		get_min_max(t_v3 **v_array, unsigned int nb_vtx,
+static void	get_min_max(t_v3 **v_array, unsigned int nb_vtx,
 float *min_max, unsigned int i)
 {
 	unsigned int	j;
@@ -30,7 +30,7 @@ float *min_max, unsigned int i)
 	}
 }
 
-static void		set_interval_and_center_point(float *min_max,
+static void	set_interval_and_center_point(float *min_max,
 float *center_point, float *max_interval)
 {
 	float	interval;
@@ -51,7 +51,7 @@ float *center_point, float *max_interval)
 		*max_interval = interval;
 }
 
-void			set_model_pos_infos(t_model *model)
+void	set_model_pos_infos(t_model *model)
 {
 	unsigned int	i;
 	unsigned int	axis_idx;
@@ -63,7 +63,7 @@ void			set_model_pos_infos(t_model *model)
 	{
 		get_min_max(model->v_array, model->nb_vtx, min_max, axis_idx);
 		set_interval_and_center_point(min_max,
-		&(model->center_points[axis_idx]), &(model->max_coord_interval));
+			&(model->center_points[axis_idx]), &(model->max_coord_interval));
 		axis_idx++;
 	}
 	while (i < model->nb_vtx)

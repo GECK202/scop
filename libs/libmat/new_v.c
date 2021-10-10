@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-t_v3		new_v3(float x, float y, float z)
+t_v3	new_v3(float x, float y, float z)
 {
 	t_v3	vec;
 
@@ -22,7 +22,7 @@ t_v3		new_v3(float x, float y, float z)
 	return (vec);
 }
 
-t_v4		new_v4(float x, float y, float z, float w)
+t_v4	new_v4(float x, float y, float z, float w)
 {
 	t_v4	vec;
 

@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-t_m4		m4_transl(t_m4 m, t_v3 vec)
+t_m4	m4_transl(t_m4 m, t_v3 vec)
 {
 	m.m[12] += vec.v[0];
 	m.m[13] += vec.v[1];

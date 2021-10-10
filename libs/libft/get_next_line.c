@@ -27,7 +27,8 @@ static int	add_to_line(char **line, char **tile)
 
 	if (!(*tile))
 		return (0);
-	if ((len = ft_strfind(*tile, '\n')) == 0)
+	len = ft_strfind(*tile, '\n');
+	if (len == 0)
 		len = ft_strlen(*tile);
 	else
 		--len;
@@ -74,7 +75,7 @@ static int	read_to_tile(const int fd, char **tile)
 	return (1);
 }
 
-int			get_next_line(const int fd, char **line)
+int	get_next_line(const int fd, char **line)
 {
 	static char	*tiles[65536] = {0};
 	int			res;

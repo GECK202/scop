@@ -12,7 +12,15 @@
 
 #include "scop.h"
 
-static char		*get_shader_src(char *src_file)
+static char	*close_return(char *final_path, char *shader_src, FILE *fs)
+{
+	if (fclose(fs) != 0)
+		put_error(CLOSE, final_path);
+	free(final_path);
+	return (shader_src);
+}
+
+static char	*get_shader_src(char *src_file)
 {
 	FILE				*fs;
 	long				size;
@@ -20,23 +28,24 @@ static char		*get_shader_src(char *src_file)
 	char				*final_path;
 	char				*shader_src;
 
-	if (!(final_path = ft_strjoin(shader_dir, src_file)))
+	final_path = ft_strjoin(shader_dir, src_file);
+	if (!final_path)
 		exit_error(ALLOC, NULL);
-	if (!(fs = fopen(final_path, "r")))
+	fs = fopen(final_path, "r");
+	if (!fs)
 		exit_error(OPEN, final_path);
 	fseek(fs, 0, SEEK_END);
-	if ((size = ftell(fs)) < 0)
+	size = ftell(fs);
+	if (size < 0)
 		exit_error(READ, final_path);
-	if (!(shader_src = (char *)malloc(sizeof(*shader_src) * size + 1)))
+	shader_src = (char *)malloc(sizeof(*shader_src) * size + 1);
+	if (!shader_src)
 		exit_error(ALLOC, NULL);
 	rewind(fs);
 	if (fread(shader_src, size, 1, fs) != 1)
 		exit_error(READ, final_path);
 	shader_src[size] = '\0';
-	if (fclose(fs) != 0)
-		put_error(CLOSE, final_path);
-	free(final_path);
-	return (shader_src);
+	return (close_return(final_path, shader_src, fs));
 }
 
 unsigned int	gen_shader(char *shader_file, int shader_type)
